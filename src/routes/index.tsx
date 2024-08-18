@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
+import Users from '../pages/Users';
 
 const PrimaryLayout = lazy(() => import('../layouts/PrimaryLayout'));
 
@@ -16,7 +17,22 @@ const routes: RouteObject[] = [
       </PrimaryLayout>
     ),
   },
-  { path: '*', element: <div>YET TO MAKE</div> },
+  {
+    path: '/users',
+    element: (
+      <PrimaryLayout>
+        <Users />
+      </PrimaryLayout>
+    ),
+  },
+  {
+    path: '*',
+    element: (
+      <PrimaryLayout>
+        <div>YET TO MAKE</div>
+      </PrimaryLayout>
+    ),
+  },
 ];
 
 export default routes;

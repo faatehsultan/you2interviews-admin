@@ -1,4 +1,4 @@
-import { CardHeader, CardBody, Card, Image } from '@chakra-ui/react';
+import { CardBody, Card, Image } from '@chakra-ui/react';
 import Form from '../../components/molecules/Form';
 import { useNavigate } from 'react-router-dom';
 import { img_logo } from '../../assets';
@@ -8,8 +8,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     // TODO add login logic here
-
-    navigate('/home', { replace: true });
+    // navigate('/home', { replace: true });
   };
 
   return (
@@ -24,6 +23,7 @@ const Login = () => {
               onSubmit: handleSubmit,
               successMsg: 'Login successful',
               buttonLabel: 'Login',
+              showSuccessMsg: true,
             }}
           />
 
