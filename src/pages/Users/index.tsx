@@ -1,13 +1,18 @@
+import { API_SERVICES, useAPIQuery } from '../../api';
 import Table from '../../components/molecules/Table';
-import { generateDummyUsers, USER_LISTING_COLUMNS } from './constants';
+import { USER_LISTING_COLUMNS } from './constants';
 
 export default function Users() {
+  const usersQuery = useAPIQuery(API_SERVICES.USER.list);
+
   return (
     <div>
       <Table
         columns={USER_LISTING_COLUMNS}
-        data={generateDummyUsers(100)}
+        data={usersQuery.data}
+        loading={usersQuery.isLoading}
         title="Users"
+        // showActions
         // newButton
       />
     </div>

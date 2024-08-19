@@ -10,7 +10,7 @@ import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 
 type FormSubmitConfig = {
-  onSubmit: () => void;
+  onSubmit: (values: Record<string, string>) => void;
   successMsg?: string;
   showSuccessMsg?: boolean | false;
   buttonLabel?: string;
@@ -44,6 +44,7 @@ export default function Form({ name, submitConfig }: FormProps) {
   const toast = useToast();
   const [validationSchema, setValidationSchema] = useState<any>(null);
   const [fields, setFields] = useState<FieldProps[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const _onError = useCallback((error: Error | string) => {
     toast({
@@ -84,15 +85,20 @@ export default function Form({ name, submitConfig }: FormProps) {
     }
   }, [_onError, name]);
 
-  const _handleSubmit = useCallback(async () => {
-    try {
-      await submitConfig.onSubmit();
-      submitConfig.showSuccessMsg &&
-        _onSuccess(submitConfig.successMsg || 'Submitted successfully');
-    } catch (error) {
-      _onError(`${error}`);
-    }
-  }, [_onError, _onSuccess, submitConfig]);
+  const _handleSubmit = useCallback(
+    async (values: Record<string, string>) => {
+      try {
+        setIsLoading(true);
+        await submitConfig.onSubmit(values);
+        setIsLoading(false);
+        submitConfig.showSuccessMsg &&
+          _onSuccess(submitConfig.successMsg || 'Submitted successfully');
+      } catch (error) {
+        _onError(`${error}`);
+      }
+    },
+    [_onError, _onSuccess, submitConfig],
+  );
 
   useEffect(() => {
     loadFiles();
@@ -108,7 +114,7 @@ export default function Form({ name, submitConfig }: FormProps) {
       validationSchema={validationSchema}
       onSubmit={_handleSubmit}
     >
-      {({ isSubmitting, errors, touched, handleSubmit }) => (
+      {({ errors, touched, handleSubmit }) => (
         <FormikForm className="flex flex-col gap-5">
           {fields.map((field) => {
             return (
@@ -133,9 +139,11 @@ export default function Form({ name, submitConfig }: FormProps) {
           })}
 
           <Button
-            isLoading={isSubmitting}
+            isLoading={isLoading}
             type="submit"
-            onClick={() => handleSubmit()}
+            onClick={() => {
+              handleSubmit();
+            }}
             className="w-full mt-2"
             {...submitConfig.buttonProps}
           >

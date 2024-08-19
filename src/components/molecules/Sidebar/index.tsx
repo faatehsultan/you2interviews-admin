@@ -12,9 +12,11 @@ import { BiSolidVideoRecording } from 'react-icons/bi';
 import { img_logo } from '../../../assets';
 import { useCache } from '../../../redux/hooks';
 import { CacheKeys } from '../../../redux/enums';
+import { useUserAuth } from '../../../api';
 
 export default function Sidebar() {
   const sidebarCache = useCache(CacheKeys.SIDEBAR_OPEN, true);
+  const { logout } = useUserAuth();
 
   return (
     <ProSidebar className="h-screen" collapsed={!sidebarCache.value}>
@@ -47,7 +49,7 @@ export default function Sidebar() {
             <MenuItem
               icon={<Icon as={BsBoxArrowLeft} color={'red.400'} />}
               color={'red.400'}
-              onClick={() => {}}
+              onClick={logout}
             >
               <span className="text-red-400">Logout</span>
             </MenuItem>

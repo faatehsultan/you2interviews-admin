@@ -1,13 +1,15 @@
-import { CardBody, Card, Image } from '@chakra-ui/react';
+import { CardBody, Card, Image, CardHeader } from '@chakra-ui/react';
 import Form from '../../components/molecules/Form';
 import { useNavigate } from 'react-router-dom';
 import { img_logo } from '../../assets';
+import { useUserAuth } from '../../api';
 
 const Login = () => {
   const navigate = useNavigate();
+  const userAuth = useUserAuth();
 
-  const handleSubmit = async () => {
-    // TODO add login logic here
+  const handleSubmit = async (values: any) => {
+    userAuth.login(values.email, values.password);
     // navigate('/home', { replace: true });
   };
 
@@ -15,7 +17,10 @@ const Login = () => {
     <div className="flex flex-col justify-normal items-center h-screen w-screen mt-24">
       <Image src={img_logo} alt="logo" width={150} />
 
-      <Card className="w-1/3 p-5 mt-5">
+      <Card className="w-1/3 p-4 mt-5 shadow">
+        <CardHeader className="text-2xl font-bold text-center">
+          Admin Portal
+        </CardHeader>
         <CardBody>
           <Form
             name="login"
@@ -23,7 +28,7 @@ const Login = () => {
               onSubmit: handleSubmit,
               successMsg: 'Login successful',
               buttonLabel: 'Login',
-              showSuccessMsg: true,
+              showSuccessMsg: false,
             }}
           />
 

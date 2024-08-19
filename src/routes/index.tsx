@@ -1,29 +1,31 @@
 import { lazy } from 'react';
-import { RouteObject } from 'react-router-dom';
-import Users from '../pages/Users';
+import { Navigate, RouteObject } from 'react-router-dom';
 
 const PrimaryLayout = lazy(() => import('../layouts/PrimaryLayout'));
 
 const Login = lazy(() => import('../pages/Login'));
-const Dashboard = lazy(() => import('../pages/Dashboard'));
+const Users = lazy(() => import('../pages/Users'));
 
 const routes: RouteObject[] = [
-  { path: '/login', element: <Login /> },
   {
-    path: '/dashboard',
+    path: '/login',
     element: (
-      <PrimaryLayout>
-        <Dashboard />
+      <PrimaryLayout isAuthRoute>
+        <Login />
       </PrimaryLayout>
     ),
   },
   {
     path: '/users',
     element: (
-      <PrimaryLayout>
+      <PrimaryLayout auth>
         <Users />
       </PrimaryLayout>
     ),
+  },
+  {
+    path: '/',
+    element: <Navigate to="/users" replace />,
   },
   {
     path: '*',

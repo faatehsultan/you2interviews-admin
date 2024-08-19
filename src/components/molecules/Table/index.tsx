@@ -8,8 +8,17 @@ import {
   TableContainer,
   Button,
   Icon,
+  Skeleton,
+  IconButton,
 } from '@chakra-ui/react';
-import { BsPlus } from 'react-icons/bs';
+import { useMemo } from 'react';
+import { BsPencil, BsPlus, BsTrash } from 'react-icons/bs';
+
+export type ColumnProps = {
+  key: string;
+  label: string;
+  width?: string | number;
+};
 
 export default function Table({
   columns = [],
@@ -18,14 +27,25 @@ export default function Table({
   newButton = false,
   newButtonTitle = 'Add New',
   newButtonOnClick = () => {},
+  loading = true,
+  showActions = false,
 }: {
-  columns?: any[];
+  columns?: ColumnProps[];
   data?: any[];
   title?: string;
   newButton?: boolean;
   newButtonTitle?: string;
   newButtonOnClick?: () => void;
+  loading?: boolean;
+  showActions?: boolean;
 }) {
+  const validColumns = useMemo(() => {
+    return [
+      ...columns,
+      ...(showActions ? [{ key: 'actions', label: 'Actions' }] : []),
+    ];
+  }, [columns, showActions]);
+
   return (
     <TableContainer>
       <div className="flex gap-5 justify-between items-center fixed bg-white w-screen md:pl-72 z-10 top-0 left-0 px-8">
@@ -47,17 +67,46 @@ export default function Table({
       <ChakraTable variant="striped" className="mt-16">
         <Thead>
           <Tr>
-            {columns.map((column, idx) => (
-              <Th key={idx}>{column}</Th>
+            {validColumns.map((column, idx) => (
+              <Th key={idx} width={column.width}>
+                {column.label}
+              </Th>
             ))}
           </Tr>
         </Thead>
         <Tbody>
-          {data.map((row, idx) => (
+          {(data || Array(10)).map((row, idx) => (
             <Tr key={idx}>
-              {columns.map((column, idx) => (
-                <Td key={idx}>{row[column]}</Td>
-              ))}
+              {validColumns.map((column, idx) =>
+                column.key == 'actions' ? (
+                  <Td className="flex gap-2" key={idx}>
+                    <IconButton
+                      icon={<Icon as={BsPencil} />}
+                      aria-label="edit"
+                      size="xs"
+                      color="white"
+                      backgroundColor="blue.400"
+                      _hover={{ backgroundColor: 'blue.600' }}
+                    />
+                    <IconButton
+                      icon={<Icon as={BsTrash} />}
+                      aria-label="delete"
+                      size="xs"
+                      color="white"
+                      backgroundColor="red.400"
+                      _hover={{ backgroundColor: 'red.600' }}
+                    />
+                  </Td>
+                ) : (
+                  <Td key={idx} width={column.width}>
+                    {loading ? (
+                      <Skeleton height="20px" isLoaded />
+                    ) : (
+                      row[column.key] ?? '-'
+                    )}
+                  </Td>
+                ),
+              )}
             </Tr>
           ))}
         </Tbody>
