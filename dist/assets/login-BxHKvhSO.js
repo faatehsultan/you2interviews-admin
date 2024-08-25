@@ -1,0 +1,1 @@
+const e=[{name:"email",label:"Email",type:"email",required:!0,placeholder:"Enter your email"},{name:"password",label:"Password",type:"password",required:!0,placeholder:"Enter your password"}];export{e as default};

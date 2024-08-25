@@ -1,0 +1,1 @@
+import{D as l,E as t,j as e,a6 as i}from"./index-Bbl_xcKs.js";const r=[{key:"displayName",label:"Name",width:"40%"},{key:"email",label:"Email",width:"40%"}];function m(){var a;const s=l(t.GLOBAL_DATA_CALLS);return e.jsx("div",{children:e.jsx(i,{columns:r,data:(a=s.value)==null?void 0:a.users,title:"Users"})})}export{m as default};
