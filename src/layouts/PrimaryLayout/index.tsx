@@ -3,7 +3,7 @@ import Drawer from '../../components/molecules/Drawer';
 import Sidebar from '../../components/molecules/Sidebar';
 import { useAppSelector } from '../../redux/hooks';
 import { useEffect } from 'react';
-import { Toast, useToast } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
 type PrimaryLayoutProps = {
   children: React.ReactNode;

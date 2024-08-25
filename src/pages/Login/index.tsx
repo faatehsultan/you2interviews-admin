@@ -1,16 +1,13 @@
 import { CardBody, Card, Image, CardHeader } from '@chakra-ui/react';
 import Form from '../../components/molecules/Form';
-import { useNavigate } from 'react-router-dom';
 import { img_logo } from '../../assets';
 import { useUserAuth } from '../../api';
 
 const Login = () => {
-  const navigate = useNavigate();
   const userAuth = useUserAuth();
 
   const handleSubmit = async (values: any) => {
     userAuth.login(values.email, values.password);
-    // navigate('/home', { replace: true });
   };
 
   return (
