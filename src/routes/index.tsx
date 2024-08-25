@@ -1,5 +1,7 @@
 import { lazy } from 'react';
 import { Navigate, RouteObject } from 'react-router-dom';
+import LiveSessions from '../pages/LiveSessions';
+import Recordings from '../pages/Recordings';
 
 const PrimaryLayout = lazy(() => import('../layouts/PrimaryLayout'));
 
@@ -20,6 +22,22 @@ const routes: RouteObject[] = [
     element: (
       <PrimaryLayout auth>
         <Users />
+      </PrimaryLayout>
+    ),
+  },
+  {
+    path: '/live-sessions',
+    element: (
+      <PrimaryLayout auth>
+        <LiveSessions />
+      </PrimaryLayout>
+    ),
+  },
+  {
+    path: '/recordings',
+    element: (
+      <PrimaryLayout auth>
+        <Recordings />
       </PrimaryLayout>
     ),
   },

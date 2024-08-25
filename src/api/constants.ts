@@ -1,5 +1,7 @@
-const USER = {
+export const USER = {
   list: '/users/list/',
 };
 
-export { USER };
+export const SESSIONS = {
+  list: '/agora/channel/list/',
+};

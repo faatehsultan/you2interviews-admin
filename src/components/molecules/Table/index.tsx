@@ -27,7 +27,7 @@ export default function Table({
   newButton = false,
   newButtonTitle = 'Add New',
   newButtonOnClick = () => {},
-  loading = true,
+  loading = false,
   showActions = false,
 }: {
   columns?: ColumnProps[];

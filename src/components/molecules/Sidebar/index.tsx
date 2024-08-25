@@ -1,6 +1,6 @@
-import { Button, Icon, IconButton, Image } from '@chakra-ui/react';
+import { Badge, Icon, IconButton, Image } from '@chakra-ui/react';
 import { Sidebar as ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   BsPeopleFill,
   BsChevronLeft,
@@ -12,11 +12,26 @@ import { BiSolidVideoRecording } from 'react-icons/bi';
 import { img_logo } from '../../../assets';
 import { useCache } from '../../../redux/hooks';
 import { CacheKeys } from '../../../redux/enums';
-import { useUserAuth } from '../../../api';
+import { API_SERVICES, useAPIQuery, useUserAuth } from '../../../api';
+import { useEffect } from 'react';
 
 export default function Sidebar() {
+  const location = useLocation();
+
   const sidebarCache = useCache(CacheKeys.SIDEBAR_OPEN, true);
+  const globalDataCalls = useCache(CacheKeys.GLOBAL_DATA_CALLS, {});
+
   const { logout } = useUserAuth();
+
+  const usersQuery = useAPIQuery(API_SERVICES.USER.list);
+  const sessionsQuery = useAPIQuery(API_SERVICES.SESSIONS.list);
+
+  useEffect(() => {
+    globalDataCalls.set({
+      users: usersQuery.data,
+      sessions: sessionsQuery.data,
+    });
+  }, [usersQuery.data, sessionsQuery.data]);
 
   return (
     <ProSidebar className="h-screen" collapsed={!sidebarCache.value}>
@@ -34,17 +49,36 @@ export default function Sidebar() {
             <MenuItem
               icon={<Icon as={BsPeopleFill} />}
               component={<Link to="/users" />}
+              className={location?.pathname == '/users' ? 'bg-gray-100' : ''}
             >
               Users
+              <Badge color={'green.400'} ml={2}>
+                {usersQuery.data?.length}
+              </Badge>
             </MenuItem>
-            <MenuItem icon={<Icon as={MdLiveTv} />} component={<Link to="/" />}>
+            <MenuItem
+              icon={<Icon as={MdLiveTv} />}
+              component={<Link to="/live-sessions" />}
+              className={
+                location?.pathname == '/live-sessions' ? 'bg-gray-100' : ''
+              }
+            >
               Live Sessions
+              <Badge color={'green.400'} ml={2}>
+                {sessionsQuery.data?.live?.length}
+              </Badge>
             </MenuItem>
             <MenuItem
               icon={<Icon as={BiSolidVideoRecording} />}
-              component={<Link to="/" />}
+              component={<Link to="/recordings" />}
+              className={
+                location?.pathname == '/recordings' ? 'bg-gray-100' : ''
+              }
             >
               Recordings
+              <Badge color={'green.400'} ml={2}>
+                {sessionsQuery.data?.recorded?.length}
+              </Badge>
             </MenuItem>
             <MenuItem
               icon={<Icon as={BsBoxArrowLeft} color={'red.400'} />}
